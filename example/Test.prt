@@ -1,12 +1,12 @@
-Config::IniFiles::Import ( V: 0.800 ) - Protokoll             13.06.2003 - 16:08
+Config::IniFiles::Import ( V: 0.800 ) - Protokoll             20.06.2003 - 00:08
 ================================================================================
 
-K_Date                    = 13.Jun.2003                                         
-K_Datum                   = Juni.2003                                           
-K_Name                    = This value set on script                            
-K_Protokoll               = D:\KVAI-LOKAL\Daten\Protokoll                       
-K_Time                    = 13.06.2003 - 16:08                                  
-Update_Kiwi               = \\kiwi\kvaiclnt\\                                   
-Update_User               = D:\KVAI-LOKAL\KVAI\\                                
+K_Date                    = 20.Jun.2003                                         
+K_Datum                   = Giugno.2003                                         
+K_Protokoll               = /USER-LOKAL/Daten/Protokoll                         
+K_Text                    = This value set on script                            
+K_Time                    = 20.06.2003 - 00:08                                  
+Update_Netz               = \\server\client\\                                   
+Update_User               = /USER-LOKAL/UserDirectory/                          
 
 ================================================================================

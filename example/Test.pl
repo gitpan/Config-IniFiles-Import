@@ -19,22 +19,22 @@
               new (
                     -file     => File::Spec->catfile( $FindBin::Bin,'Test.ini' ),
                     -language => 'English',
-                    -predef   => [ 'UserValue', 'KV', 'This value set on script' ],
-                    -predef   => [ 'DateTime' , 'Datum', '%B.%Y', 'German' ],
+                    -predef   => [ 'UserValue', 'Text', 'This value set on script' ],
+                    -predef   => [ 'DateTime' , 'Datum', '%B.%Y', 'Italian' ],
                   );
 
     $INI -> Import(
                     -loadsection  => [ qw( K ) ],
-                    -loadvariable => [ qw( Update::Kiwi+User ) ],
+                    -loadvariable => [ qw( Update::Netz+User ) ],
                     -exportto     => 'Cfg',
                     -protocol     => $FH
                   );
   }
 
-  print "Update_Kiwi    : $Cfg::Update_Kiwi\n";
+  print "Update_Netz    : $Cfg::Update_Netz\n";
   print "Update_User    : $Cfg::Update_User\n";
   print "K_Time         : $Cfg::K_Time\n";
   print "K_Date         : $Cfg::K_Date\n";
-  print "K_Name         : $Cfg::K_Name\n";
+  print "K_Text         : $Cfg::K_Text\n";
   print "K_Datum        : $Cfg::K_Datum\n";
-
+  print "K_Protokoll    : $Cfg::K_Protokoll\n";

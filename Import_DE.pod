@@ -3,7 +3,7 @@
 # #                -------------------------------------------------------------------------------- #
 # # Author      :  Juergen von Brietzke                                                 (c) JvBSoft #
 # #                -------------------------------------------------------------------------------- #
-# # Version     :  0.901                                                                19.Jun.2003 #
+# # Version     :  1.000                                                                20.Jun.2003 #
 # ###################################################################################################
 # #                                              P O D                                              #
 # ###################################################################################################
@@ -16,7 +16,7 @@ Config::IniFile::Import - Import von MS-Windows-Format-Ini-Dateien auf Variablen
 
 =head1 VERSION
 
-Dieses Dokument beschreibt die Version 0.901 des Moduls Config::IniFiles::Import vom 19.06.2003
+Dieses Dokument beschreibt die Version 1.000 des Moduls Config::IniFiles::Import vom 20.06.2003
 
 =head1 ANWENDUNG
 
@@ -438,8 +438,8 @@ vorzunehmen:
 0.700 - 15.05.2003 - JvB
 
         Weitere predefinierte Variable hinzugefuegt.
-        - TimeShort, TimeLong, DateShort, DateLong, DateTime
-        Veraenderung des optionalen Protokolldrucks.
+        - TimeShort, TimeLong, DateShort, DateLong, DateTime Veraenderung des optionalen
+          Protokolldrucks.
 
 0.701 - 13.06.2003 - JvB
 
@@ -454,6 +454,19 @@ vorzunehmen:
         - Erweiterung fuer mehrere Substitutionen in einer Zeile
         - Verbesserung der Dokumentation
         - Dokumentation ( POD ) ist eine eigenstaendige Datei
+
+0.901 - 19.06.2003 - JvB
+
+        - Ueberarbeitung der Dokumentation
+
+0.902 - 19.06.2003 - JvB
+
+        Fehlerkorrektur:
+        - Bei verschachtelten Substitutionen traten teilweise Abbrueche auf.
+
+1.000 - 20.06.2003 - JvB
+
+        - Beispiel verbessert
 
 =head1 AUTOREN
 

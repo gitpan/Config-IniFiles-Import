@@ -3,7 +3,7 @@
 # #                -------------------------------------------------------------------------------- #
 # # Author      :  Juergen von Brietzke                                                 (c) JvBSoft #
 # #                -------------------------------------------------------------------------------- #
-# # Version     :  0.901                                                                19.Jun.2003 #
+# # Version     :  1.000                                                                20.Jun.2003 #
 # ###################################################################################################
 # # Language    :  PERL 5                        (v)  5.00x.xx  ,  5.6.x  ,  5.8.x                  #
 # #                -------------------------------------------------------------------------------- #
@@ -15,7 +15,7 @@
 # #                FindBin                       Ermittelt das Verzeichnis des Perl-Skripts         #
 # #                Config::IniFiles              Verarbeitung von MS-Windows-Format-Ini-Dateien     #
 # ###################################################################################################
-# # Decription  :  Import von MS-Windiws-Format-Ini-Dateien auf Variablen                           #
+# # Decription  :  Import von MS-Windows-Format-Ini-Dateien auf Variablen                           #
 # #                ================================================================================ #
 # #                Die Definitionen von Ini-Dateien werden mittels des Moduls 'Config::IniFiles'    #
 # #                gelesen, und mit dem vorliegenden Modul auf korrespondierende Variablen impor-   #
@@ -76,7 +76,7 @@
 
   package Config::IniFiles::Import;
 
-  use vars qw( $VERSION );  $VERSION = '0.901';
+  use vars qw( $VERSION );  $VERSION = '1.000';
 
   use Carp;
   use Date::Language;
@@ -222,21 +222,20 @@
 
         foreach my $key ( keys( %{$self->{entrys}} ) )
         {
-          while ( $self->{entrys}->{$key} =~ /{([:\w]+)}/ )
+          while ( $self->{entrys}->{$key} =~ /{([:\w]+?)}/ )
           {
             if    ( defined( $self->{entrys}->{$1} ) )
             {
-              $self->{entrys}->{$key} =~ s/{([:\w]+)}/$self->{entrys}->{$1}/g;
+              $self->{entrys}->{$key} =~ s/{([:\w]+?)}/$self->{entrys}->{$1}/;
             }
             elsif ( defined( $self->{predef}->{$1} ) )
             {
-              $self->{entrys}->{$key} =~ s/{([:\w]+)}/$self->{predef}->{$1}/g;
+              $self->{entrys}->{$key} =~ s/{([:\w]+?)}/$self->{predef}->{$1}/;
             }
             else
             {
               croak "Can't substitute value by $key\n";
             }
-            redo if ( $self->{entrys}->{$key} =~ /{/ );
           }
         }
 
