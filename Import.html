@@ -1,0 +1,404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Config::IniFile::Import - Import von MS-Windows-Format-Ini-Dateien auf Variablen</title>
+<link rev="made" href="mailto:" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#version">VERSION</a></li>
+	<li><a href="#anwendung">ANWENDUNG</a></li>
+	<li><a href="#beschreibung">BESCHREIBUNG</a></li>
+	<ul>
+
+		<li><a href="#wertesubstitution_mit_inidatei_eintraegen">Wertesubstitution mit INI-Datei Eintraegen</a></li>
+		<li><a href="#wertesubstitution_mit_'predefinierte_variablen'">Wertesubstitution mit 'predefinierte Variablen'</a></li>
+		<li><a href="#predefinierte_variable">Predefinierte Variable</a></li>
+	</ul>
+
+	<li><a href="#methoden">METHODEN</a></li>
+	<ul>
+
+		<li><a href="#new__klassenkonstruktor">new - Klassenkonstruktor</a></li>
+		<li><a href="#import__importiert_die_werte_auf_variable">Import - Importiert die Werte auf Variable</a></li>
+	</ul>
+
+	<li><a href="#beispiel">BEISPIEL</a></li>
+	<ul>
+
+		<li><a href="#datei__ini1.ini">Datei - Ini1.ini</a></li>
+		<li><a href="#datei__ini2.ini">Datei - Ini2.ini</a></li>
+		<li><a href="#programm">Programm</a></li>
+	</ul>
+
+	<li><a href="#fehlermeldungen">FEHLERMELDUNGEN</a></li>
+	<li><a href="#pragmas">PRAGMAS</a></li>
+	<li><a href="#module">MODULE</a></li>
+	<li><a href="#versionen">VERSIONEN</a></li>
+	<li><a href="#autoren">AUTOREN</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>Config::IniFile::Import - Import von MS-Windows-Format-Ini-Dateien auf Variablen</p>
+<p>
+</p>
+<hr />
+<h1><a name="version">VERSION</a></h1>
+<p>Dieses Dokument beschreibt die Version 0.700 des Moduls Config::IniFiles::Import vom 15.05.2003</p>
+<p>
+</p>
+<hr />
+<h1><a name="anwendung">ANWENDUNG</a></h1>
+<pre>
+  use Config::IniFiles::Import;
+  ...
+  $INI = Config::IniFiles::Import -&gt; new( -option =&gt; value [ ... ] );
+  ...
+  $INI -&gt; Import(
+                  -loadsection  =&gt; [ qw( section1 section2 ...                        ) ],
+                  -loadvariable =&gt; [ qw( section3::param1+param2 section4::param1 ... ) ],
+                  -protocol     =&gt; filehandle                                            ,
+                  -exportto     =&gt; 'Package'
+                );</pre>
+<p>
+</p>
+<hr />
+<h1><a name="beschreibung">BESCHREIBUNG</a></h1>
+<p>Die Definitionen von INI-Dateien werden mittels des Moduls 'Config::IniFiles' gelesen, und mit dem
+vorliegenden Modul auf korrespondierende Variablen importiert.</p>
+<p>Dabei werden die Variablen-Namen wie folgt gebildet:</p>
+<pre>
+  - Der Sektions-Name wird mit dem Parameter-Namen, getrennt durch Unterstrich verbunden.
+  - Standardmaessig werden die Variablen in dem Package 'INI' abgelegt. Dies kann jedoch durch die
+    Option '-exportto' beim Aufruf der Methode 'Import' geaendert werden.</pre>
+<p>Aus diesem Grunde gelten fuer die Sektions- und Parameter-Namen folgende Einschraenkungen:</p>
+<pre>
+  - Diese Bezeichner duerfen nur aus gueltigen Wortzeichen bestehen
+    ( a-z, A-Z, 0-9, _ )
+  - Die Gross-/Kleinschreibung wird beachtet und fuehrt zu verschiedenen
+    Variablennamen</pre>
+<p>
+</p>
+<h2><a name="wertesubstitution_mit_inidatei_eintraegen">Wertesubstitution mit INI-Datei Eintraegen</a></h2>
+<p>Es besteht die Moeglichkeit eine Wertesubstitution in den INI-Dateien vorzunehmen zu lassen. Hierzu
+ist folgende Syntax anzuwenden:</p>
+<pre>
+  Parameter = ...{Sektion::Parameter}...</pre>
+<dl>
+<dt><strong><a name="item_substitutions%2dbeispiel"><strong>Substitutions-Beispiel</strong></a></strong><br />
+</dt>
+<dd>
+<pre>
+  [SEKTION_1]
+  Wert1 = bla
+  Wert2 = foo{SEKTION_1::Wert1}foo</pre>
+</dd>
+<dd>
+<pre>
+  Das ergibt fuer Wert2 den Wert 'fooblafoo'.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="wertesubstitution_mit_'predefinierte_variablen'">Wertesubstitution mit 'predefinierte Variablen'</a></h2>
+<p>Fuer die Substitution steht ein Satz von prefinierten Variablen zur Verfuegung, die wie folgt
+angesprochen werden koennen:</p>
+<pre>
+  Parameter = ...{Variable}...</pre>
+<p>
+</p>
+<h2><a name="predefinierte_variable">Predefinierte Variable</a></h2>
+<p>Folgende 'predefinierte Variablen' sind definiert:</p>
+<dl>
+<dt><strong><a name="item_findbin"><strong>FindBin</strong></a></strong><br />
+</dt>
+</dl>
+<p>Enthaelt den Pfad zum aktuellen Perl-Skript.</p>
+<dl>
+<dt><strong><a name="item_username"><strong>UserName</strong></a></strong><br />
+</dt>
+</dl>
+<p>Enthaelt den Namen des User's, der das aktuelle Skript gestarten hat.</p>
+<dl>
+<dt><strong><a name="item_timeshort"><strong>TimeShort</strong></a></strong><br />
+</dt>
+</dl>
+<p>Enthaelt die Uhrzeit des Programmstarts in der Form 'HH:MM'</p>
+<dl>
+<dt><strong><a name="item_timelong"><strong>TimeLong</strong></a></strong><br />
+</dt>
+</dl>
+<p>Enthaelt die Uhrzeit des Programmstarts in der Form 'HH:MM:SS'</p>
+<dl>
+<dt><strong><a name="item_dateshort"><strong>DateShort</strong></a></strong><br />
+</dt>
+</dl>
+<p>Enthaelt das Datum des Programmstarts in der Form 'TT.MM.JJJJ'</p>
+<dl>
+<dt><strong><a name="item_datelong"><strong>DateLong</strong></a></strong><br />
+</dt>
+</dl>
+<p>Enthaelt das Datum des Programmstarts in der Form 'TT.MMM.JJJJ'</p>
+<dl>
+<dt><strong><a name="item_datetime"><strong>DateTime</strong></a></strong><br />
+</dt>
+</dl>
+<p>Enthaelt das Datum und die Uhrzeit des Programmstarts in der Form 'TT.MM.JJJJ - HH:MM'</p>
+<dl>
+<dt><strong><a name="item_substitutions%2dbeispiel_fuer_%27predifinierte_var"><strong>Substitutions-Beispiel fuer 'predifinierte Variablen'</strong></a></strong><br />
+</dt>
+<dd>
+<pre>
+  [SEKTION_2]
+  Wert3 = {FindBin}</pre>
+</dd>
+<dd>
+<pre>
+  Das ergibt fuer Wert3 den Pfad zum aktuellen Perl-Skript.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="methoden">METHODEN</a></h1>
+<p>
+</p>
+<h2><a name="new__klassenkonstruktor">new - Klassenkonstruktor</a></h2>
+<p>$INI = Config::IniFiles::Import -&gt; new(
+                                        -option =&gt; value,
+                                        -option =&gt; value,
+                                        ...
+                                      );</p>
+<p>Alle hier uebergebenen Parameterpaare ( Option / Wert ) werden an das Modul 'Config::IniFiles'
+weitergereicht. Die Beschreibung der Parameter ist dessen Dokumentation zu entnehmen.
+Nachfolgend werden jedoch die moeglichen Parameter aufgefuehrt.</p>
+<dl>
+<dt><strong><a name="item_%2dfile"><strong>-file</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_%2dallowcontinue"><strong>-allowcontinue</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_%2dallowedcommentchars"><strong>-allowedcommentchars</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_%2dcommentchar"><strong>-commentchar</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_%2ddefault"><strong>-default</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_%2dimport"><strong>-import</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_%2dnocase"><strong>-nocase</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_%2dreloadwarn"><strong>-reloadwarn</strong></a></strong><br />
+</dt>
+</dl>
+<p>
+</p>
+<h2><a name="import__importiert_die_werte_auf_variable">Import - Importiert die Werte auf Variable</a></h2>
+<p>$INI -&gt; Import(
+                -loadsection  =&gt; [ qw( section1 section2 ...                        ) ],
+                -loadvariable =&gt; [ qw( section3::param1+param2 section4::param1 ... ) ],
+                -protocol     =&gt; filehandle                                            ,
+                -exportto     =&gt; 'Package'
+              );</p>
+<p>Diese Methode liest die INI-Datei(en) ein und importiert die Daten auf Variable. Die Definition
+der Variablen erfolgt in dieser Methode als globale Variable ( use vars qw( ... ) ). Damit
+koennen Programme die dieses Modul anwenden, weiter mit dem Pragma 'use strict' arbeiten.</p>
+<dl>
+<dt><strong><a name="item_%2dloadsection_%2d_%28_optional_%29"><strong>-loadsection</strong>  -  ( optional )</a></strong><br />
+</dt>
+</dl>
+<p>Syntax:  '-loadsection' =&gt; [ qw( section1 section2 ... ) ]</p>
+<p>Wird diese Option uebergeben, so werden nur die benannten Sektionen importiert. Andernfall erfolgt
+der Import aller Sektionen.</p>
+<dl>
+<dt><strong><a name="item_%2dloadvariable_%2d_%28_optional_%29"><strong>-loadvariable</strong>  -  ( optional )</a></strong><br />
+</dt>
+</dl>
+<p>Syntax: '-loadvariable' =&gt; [ qw( section1::par1+par2 section2::par ... ) ]</p>
+<p>Wird diese Option uebergeben, so werden nur die benannten Variablen importiert.</p>
+<dl>
+<dt><strong><a name="item_%2dprotocol_%2d_%28_optional_%29"><strong>-protocol</strong>  -  ( optional )</a></strong><br />
+</dt>
+</dl>
+<p>Syntax: '-protocol' =&gt; filehandle</p>
+<p>Wird diese Option uebergeben, so wird der Import der Variablen in der durch den 'filehandle'
+uebergebenen Datei protokolliert.</p>
+<dl>
+<dt><strong><a name="item_%2dexportto"><strong>-exportto</strong></a></strong><br />
+</dt>
+</dl>
+<p>Syntax: '-exportto' =&gt; 'PackageName'</p>
+<p>Standardmaessig werden die Variablen in dem Package 'INI' abgelegt. Dies kann mit dieser Option
+beim Aufruf der Methode geaendert werden.</p>
+<dl>
+<dt><strong><a name="item_hinweis"><strong>Hinweis</strong></a></strong><br />
+</dt>
+</dl>
+<p>Die Optionen '-loadsection' und '-loadvariable' koennen kombiniert werden.</p>
+<p>
+</p>
+<hr />
+<h1><a name="beispiel">BEISPIEL</a></h1>
+<p>Das nachfolgende Beispiel liest die INI-Dateien 'Ini1.ini' und 'Ini2.ini' aus dem aktuellen
+Verzeichnis ein. Es werden die Angaben der Sektionen 'GLOBAL' und 'VERZEICHNISSE' sowie die
+Parameter 'Name' und 'TempDir' der Sektion 'USER' auf die entsprechenden Variablen des Package
+'Cfg' des Programms importiert. Weitere eventuell vorhandene Sektionen und Variablen werden
+ignoriert.</p>
+<p>Die importierten Variablen werden in der Datei 'Load.prt' im aktuellen Verzeichnis protokolliert.</p>
+<p>
+</p>
+<h2><a name="datei__ini1.ini">Datei - Ini1.ini</a></h2>
+<pre>
+  [GLOBAL]
+  Script        = {FindBin}
+  [USER]
+  Name          = {UserName}
+  TmpDir        = C:\Tmp
+  TempDir       = C:\Temp\{UserName}</pre>
+<p>
+</p>
+<h2><a name="datei__ini2.ini">Datei - Ini2.ini</a></h2>
+<pre>
+  [VERZEICHNISSE]
+  Daten         = {USER::TempDir}\Daten
+  Protokolle    = {USER::TempDir}\Protokoll
+  [UPDATE]
+  Programme     = D:\Update\Prg
+  Dokumentation = D:\Update\Doc</pre>
+<p>
+</p>
+<h2><a name="programm">Programm</a></h2>
+<pre>
+  #!/usr/bin/perl
+  ###############################################################################
+  #
+    use Config::IniFiles::Import;
+    use File::Spec;
+  #
+    $FH = FileHandle -&gt; new( File::Spec -&gt; catfile( qw( . Load.prt ) ), 'w' );
+  #
+    print $FH &quot;Test des Moduls : Config::IniFiles::Import\n&quot;;
+    print $FH '-' x 100 . &quot;\n\n&quot;;
+  #
+    $INI = Config::IniFiles::Import -&gt;
+           new( -file   =&gt; File::Spec-&gt;catfile( qw( . Ini1.ini ) ),
+                -import =&gt; Config::IniFiles -&gt;
+                           new( -file =&gt; File::Spec-&gt;catfile( qw( . Ini2.ini ) ) )
+              );
+  #
+    $INI -&gt; Import(
+                    -loadsection  =&gt; [ qw( GLOBAL VERZEICHNISSE ) ],
+                    -loadvariable =&gt; [ qw( USER::Name+TempDir   ) ],
+                    -protocol     =&gt; $FH                           ,
+                    -exportto     =&gt; 'Cfg'
+                  );
+  #
+    print &quot;$Cfg::USER_Name\n&quot;;
+  #
+  ###############################################################################</pre>
+<p>
+</p>
+<hr />
+<h1><a name="fehlermeldungen">FEHLERMELDUNGEN</a></h1>
+<dl>
+<dt><strong><a name="item_can%27t_substitute_value_by_sektion_schluessel"><strong>Can't substitute value by sektion_schluessel</strong></a></strong><br />
+</dt>
+</dl>
+<p>Bei einer Substitution wird auf eine nicht definierte Kombination aus Sektion und Schluessel
+zugegriffen, oder es wird eine nicht existente predifinierte Variable angesprochen.</p>
+<p>Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebrochen!</p>
+<dl>
+<dt><strong><a name="item_can%27t_create_variable_package%3a%3asektion_schlu"><strong>Can't create variable package::sektion_schluessel</strong></a></strong><br />
+</dt>
+</dl>
+<p>Die Angegeben Variable konnte nicht erzeugt werden.</p>
+<p>Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebrochen!</p>
+<p>
+</p>
+<hr />
+<h1><a name="pragmas">PRAGMAS</a></h1>
+<p>strict</p>
+<p>vars</p>
+<p>
+</p>
+<hr />
+<h1><a name="module">MODULE</a></h1>
+<p>Carp</p>
+<p>FindBin</p>
+<p>Config::IniFiles   Version : 2.29 ( oder neuer )</p>
+<p>Bei dem Einsatz unter Windoofs ist folgender Patch in dem Modul 'Config::IniFiles'
+vorzunehmen:</p>
+<pre>
+  - Im Unterprogramm 'ReadConfig' ist die Anweisung wie folgt zu aendern:
+    - von: 'while($self-&gt;{allowcontinue} &amp;&amp; $val =~ s/\\$//) {'
+    - in : 'while($self-&gt;{allowcontinue} &amp;&amp; $val =~ s/\s\\$//) {'</pre>
+<p>
+</p>
+<hr />
+<h1><a name="versionen">VERSIONEN</a></h1>
+<p>0.100 - 22.09.2002 - JvB</p>
+<pre>
+        Erste Test- und Entwicklungsversion</pre>
+<p>0.200 - 22.09.2002 - JvB</p>
+<pre>
+        Mit der Option '-loadsection', der Import-Methode, ist es moeglich ausgewaehlte Sektione zu
+        importieren.</pre>
+<p>0.210 - 23.09.2002 - JvB</p>
+<pre>
+        Ueberarbeitung der Dokumentation und Straffung des Codes</pre>
+<p>0.300 - 23.09.2002 - JvB</p>
+<pre>
+        Mit der Option '-protocol' besteht die Moeglichkeit den Variablenimport zu Protokollieren.</pre>
+<p>0.301 - 24.09.2002 - JvB</p>
+<pre>
+        Fehlerkorrektur:
+        - Wurde die Option '-loadsection' nicht angegeben, wurden der Variablenimport nicht
+          durchgefuehrt.</pre>
+<p>0.400 - 14.05.2003 - JvB</p>
+<pre>
+        Veraenderung des Importes der INI-Daten.
+        - Die Namen der Variablen werden nach einem neuen Verfahren gebildet.
+        - Das Package, in das der Import der Variablen erfolgt ist waehlbar.</pre>
+<p>0.500 - 14.05.2003 - JvB</p>
+<pre>
+        Erweiterung fuer die Verarbeitung predefinierter Variablen.
+        - FindBin, UserName</pre>
+<p>0.600 - 15.05.2003 - JvB</p>
+<pre>
+        Erweiterung fuer den Import einzelner Parameter einer Sektion.
+        - Mit der Option '-loadvariable' koennen nur einzelne Parameter einer Sektion uebernommen
+          werden.</pre>
+<p>0.700 - 15.05.2003 - JvB</p>
+<pre>
+        Weitere predefinierte Variable hinzugefuegt.
+        - TimeShort, TimeLong, DateShort, DateLong, DateTime
+        Veraenderung des optionalen Protokolldrucks.</pre>
+<p>
+</p>
+<hr />
+<h1><a name="autoren">AUTOREN</a></h1>
+<p>JvB  -  Juergen von Brietzke
+     -  <a href="mailto:juergen.von.brietzke@t-online.de">juergen.von.brietzke@t-online.de</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 2002, 2003 by JvB.</p>
+<p>Dieses Modul ist freie Software.
+Die Benutzung und / oder Veraenderung unterliegt der selben Lizenz wie Perl.</p>
+
+</body>
+
+</html>
