@@ -3,7 +3,7 @@
 # #                -------------------------------------------------------------------------------- #
 # # Author      :  Juergen von Brietzke                                                 (c) JvBSoft #
 # #                -------------------------------------------------------------------------------- #
-# # Version     :  1.000                                                                20.Jun.2003 #
+# # Version     :  1.100                                                                27.Aug.2003 #
 # ###################################################################################################
 # #                                              P O D                                              #
 # ###################################################################################################
@@ -16,7 +16,7 @@ Config::IniFile::Import - Import von MS-Windows-Format-Ini-Dateien auf Variablen
 
 =head1 VERSION
 
-Dieses Dokument beschreibt die Version 1.000 des Moduls Config::IniFiles::Import vom 20.06.2003
+Dieses Dokument beschreibt die Version 1.100 des Moduls Config::IniFiles::Import vom 27.08.2003
 
 =head1 ANWENDUNG
 
@@ -61,6 +61,22 @@ Substitution ist folgende Syntax anzuwenden:
   Wert2 = foo{SEKTION_1::Wert1}foo
 
   Das ergibt fuer Wert2 den Wert 'fooblafoo'.
+
+=head2 Wertesubstizution mit 'Environment Variablen'
+
+Es ist moeglich aus den INI-Dateien heraus auf Environment-Variable zuzugreifen. Diese werden wie
+folgt angesprochen:
+
+  Parameter = ...{ENV::Variable}...
+
+Hieraus ergibt sich die Einschraenkung, dass Sektionen nicht mit 'ENV' benannt werden duerfen!!!
+
+=item B<Substitutions-Beispiel>
+
+  Es existiert z.B. die Environment-Variable 'HOME' mit dem Wert '/home/mein_verzeichnis' und
+  dieser Wert soll dem Eintrag 'HomeDir' zugewiesen werden:
+ 
+  HomeDir = {ENV::HOME}
 
 =head2 Wertesubstitution mit 'predefinierte Variablen'
 
@@ -467,6 +483,10 @@ vorzunehmen:
 1.000 - 20.06.2003 - JvB
 
         - Beispiel verbessert
+
+1.100 - 27.08.2003 - JvB
+
+        Erweiterung fuer den Zugriff auf Environment-Variable
 
 =head1 AUTOREN
 

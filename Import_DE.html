@@ -19,6 +19,7 @@
 	<ul>
 
 		<li><a href="#wertesubstitution_mit_inidatei_eintraegen">Wertesubstitution mit INI-Datei Eintraegen</a></li>
+		<li><a href="#wertesubstizution_mit_'environment_variablen'">Wertesubstizution mit 'Environment Variablen'</a></li>
 		<li><a href="#wertesubstitution_mit_'predefinierte_variablen'">Wertesubstitution mit 'predefinierte Variablen'</a></li>
 		<li><a href="#predefinierte_variable">Predefinierte Variable</a></li>
 		<li><a href="#nutzerdefinierte_variablen">Nutzerdefinierte Variablen</a></li>
@@ -58,7 +59,7 @@
 </p>
 <hr />
 <h1><a name="version">VERSION</a></h1>
-<p>Dieses Dokument beschreibt die Version 1.000 des Moduls Config::IniFiles::Import vom 20.06.2003</p>
+<p>Dieses Dokument beschreibt die Version 1.100 des Moduls Config::IniFiles::Import vom 27.08.2003</p>
 <p>
 </p>
 <hr />
@@ -108,6 +109,25 @@ Substitution ist folgende Syntax anzuwenden:</p>
 <dd>
 <pre>
   Das ergibt fuer Wert2 den Wert 'fooblafoo'.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h2><a name="wertesubstizution_mit_'environment_variablen'">Wertesubstizution mit 'Environment Variablen'</a></h2>
+<p>Es ist moeglich aus den INI-Dateien heraus auf Environment-Variable zuzugreifen. Diese werden wie
+folgt angesprochen:</p>
+<pre>
+  Parameter = ...{ENV::Variable}...</pre>
+<p>Hieraus ergibt sich die Einschraenkung, dass Sektionen nicht mit 'ENV' benannt werden duerfen!!!</p>
+<dl>
+<dt><strong><strong>Substitutions-Beispiel</strong></strong><br />
+</dt>
+<dd>
+<pre>
+  Es existiert z.B. die Environment-Variable 'HOME' mit dem Wert '/home/mein_verzeichnis' und
+  dieser Wert soll dem Eintrag 'HomeDir' zugewiesen werden:
+ 
+  HomeDir = {ENV::HOME}</pre>
 </dd>
 </dl>
 <p>
@@ -444,6 +464,9 @@ vorzunehmen:</p>
 <p>1.000 - 20.06.2003 - JvB</p>
 <pre>
         - Beispiel verbessert</pre>
+<p>1.100 - 27.08.2003 - JvB</p>
+<pre>
+        Erweiterung fuer den Zugriff auf Environment-Variable</pre>
 <p>
 </p>
 <hr />

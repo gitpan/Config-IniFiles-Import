@@ -3,7 +3,7 @@
 # #                -------------------------------------------------------------------------------- #
 # # Author      :  Juergen von Brietzke                                                 (c) JvBSoft #
 # #                -------------------------------------------------------------------------------- #
-# # Version     :  1.000                                                                20.Jun.2003 #
+# # Version     :  1.100                                                                27.Aug.2003 #
 # ###################################################################################################
 # # Language    :  PERL 5                        (v)  5.00x.xx  ,  5.6.x  ,  5.8.x                  #
 # #                -------------------------------------------------------------------------------- #
@@ -76,7 +76,9 @@
 
   package Config::IniFiles::Import;
 
-  use vars qw( $VERSION );  $VERSION = '1.000';
+  use vars qw( $VERSION );
+
+  $VERSION = '1.100';
 
   use Carp;
   use Date::Language;
@@ -234,7 +236,22 @@
             }
             else
             {
-              croak "Can't substitute value by $key\n";
+              my $subst = $1;
+              if ( $subst =~ /(ENV::)(.+)/ )
+              {
+                if ( defined( $ENV{$2} ) )
+                {
+                  $self->{entrys}->{$key} =~ s/{([:\w]+?)}/$ENV{$2}/;
+                }
+                else
+                {
+                  croak "Can't substitute value by $key\n";
+                }
+              }
+              else
+              {
+                croak "Can't substitute value by $key\n";
+              }
             }
           }
         }
