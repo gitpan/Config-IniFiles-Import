@@ -1,6 +1,39 @@
 Revision history for Perl extension Config::IniFiles::Import.
 
-0.01  Wed Jun 11 21:48:29 2003
-	- original version; created by h2xs 1.22 with options
-		-X -n Config::IniFiles::Import
-
+####################################################################################
+# 0.100 - 22.09.2002 - JvB                                                         #
+#         Erste Test- und Entwicklungsversion                                      #
+#         - original version; created by h2xs 1.22 with options                    #
+#           -X -n Config::IniFiles::Import                                         #
+# 0.200 - 22.09.2002 - JvB                                                         #
+#         Mit der Option '-loadsection', der Import-Methode, ist es moeglich aus-  #
+#         gewaehlte Sektione zu importieren.                                       #
+# 0.210 - 23.09.2002 - JvB                                                         #
+#         Ueberarbeitung der Dokumentation und Straffung des Codes                 #
+# 0.300 - 23.09.2002 - JvB                                                         #
+#         Mit der Option '-protocol' besteht die Moeglichkeit den Variablenimport  #
+#         zu Protokollieren.                                                       #
+# 0.301 - 24.09.2002 - JvB                                                         #
+#         Fehlerkorrektur:                                                         #
+#         - Wurde die Option '-loadsection' nicht angegeben, wurden der Variablen- #
+#           import nicht durchgefuehrt.                                            #
+# 0.400 - 14.05.2003 - JvB                                                         #
+#         Veraenderung des Importes der INI-Daten.                                 #
+#         - Die Namen der Variablen werden nach einem neuen Verfahren gebildet.    #
+#         - Das Package, in das der Import der Variablen erfolgt ist waehlbar.     #
+# 0.500 - 14.05.2003 - JvB                                                         #
+#         Erweiterung fuer die Verarbeitung predefinierter Variablen.              #
+#         - FindBin, UserName                                                      #
+# 0.600 - 15.05.2003 - JvB                                                         #
+#         Erweiterung fuer den Import einzelner Parameter einer Sektion.           #
+#         - Mit der Option '-loadvariable' koennen nur einzelne Parameter einer    #
+#           Sektion uebernommen werden.                                            #
+# 0.700 - 15.05.2003 - JvB                                                         #
+#         Weitere predefinierte Variable hinzugefuegt.                             #
+#         - TimeShort, TimeLong, DateShort, DateLong, DateTime                     #
+#         - Veraenderung des optionalen Protokolldrucks.                           #
+# 0.701 - 13.06.2003 - JvB                                                         #
+#         - Korrektur der Dokumentation                                            #
+# 0.800 - 13.06.2003 - JvB                                                         #
+#         - Erweiterung fuer frei definierbare 'predefinierte Variable'            #
+####################################################################################

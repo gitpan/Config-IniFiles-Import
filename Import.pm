@@ -3,7 +3,7 @@
 # #                -------------------------------------------------------------------------------- #
 # # Author      :  Juergen von Brietzke                                                 (c) JvBSoft #
 # #                -------------------------------------------------------------------------------- #
-# # Version     :  0.700                                                                15.Mai.2003 #
+# # Version     :  0.800                                                                13.Jun.2003 #
 # ###################################################################################################
 # # Language    :  PERL 5                        (v)  5.00x.xx  ,  5.6.x  ,  5.8.x                  #
 # #                -------------------------------------------------------------------------------- #
@@ -11,6 +11,7 @@
 # #                vars                          Vordeklaration globaler Variablen                  #
 # #                -------------------------------------------------------------------------------- #
 # # Module      :  Carp                          Generiert Fehlermeldungen                          #
+# #                Date::Language                Datumsformatierung mit Multi-Language-Support      #
 # #                FindBin                       Ermittelt das Verzeichnis des Perl-Skripts         #
 # #                Config::IniFiles              Verarbeitung von MS-Windows-Format-Ini-Dateien     #
 # ###################################################################################################
@@ -29,21 +30,43 @@
 # #                die wie folgt angesprochen werden koennen:                                       #
 # #                 - Parameter = ...{Variable}...                                                  #
 # #                Folgende predefinierte Variablen sind definiert:                                 #
-# #                 - ScriptPath  - Verzeichnis-Pfad zum Skript                                     #
+# #                 - FindBin     - Verzeichnis-Pfad zum Skript                                     #
 # #                 - UserName    - Name des angemeldeten Nutzers                                   #
 # #                 - TimeShort   - Uhrzeit des Programmstarts           - 'HH:MM'                  #
 # #                 - TimeLong    - Uhrzeit des Programmstarts           - 'HH:MM:SS'               #
 # #                 - DateShort   - Datum des Programmstarts             - 'TT.MM.JJJJ'             #
-# #                 - DateLong    - Datum des Programmstarts             - 'TT.MMM.JJJJ'            #
 # #                 - DateTime    - Datum und Uhrzeit des Programmstarts - 'TT.MM.JJJJ - HH:MM'     #
+# #                 - DateLong    - Datum des Programmstarts             - 'TT.MMM.JJJJ'            #
+# #                   Der Monatsname wird standardmaessig in deutscher Sprache erzeugt. Durch den   #
+# #                   Parameter '-language' beim Konstruktor kann dieses Verhalten ueberschrieben   #
+# #                   werden. Unterstuetzt werden die Moeglichkeiten des Moduls 'Date::Language'.   #
+# #                Darueber hinaus besteht die Moeglichkeit weitere 'predifierte Variablen' ueber   #
+# #                den Konstruktor zu erzeugen. Hierfuer stehen die beiden folgenden Formen:        #
+# #                 - -predef => [ 'UserValue', key, value ]               allgemeiner Wert         #
+# #                 - -predef => [ 'DateTime' , key, template, language ]  Datum und/oder Zeit      #
 # #                -------------------------------------------------------------------------------- #
 # #                Methode:  new                   Klassenkonstruktor                               #
 # #                          ---------------------------------------------------------------------- #
 # #                          Definiert eine neue Klasse vom Typ - Config::IniFiles::Import          #
 # #                          ---------------------------------------------------------------------- #
-# #                          Alle hier uebergebenen Parameterpaare ( Option / Wert ) werden an das  #
-# #                          Modul 'Config::IniFiles' weitergereicht. Die Beschreibung der Parame-  #
-# #                          ter ist dessen Dokumentation zu entnehmen.                             #
+# #                          Folgende Parameterpaare ( Option / Wert ) werden von diesem Modul aus- #
+# #                          gewertet:                                                              #
+# #                           -language              ( optional )                                   #
+# #                            Syntax: '-language' => language_name                                 #
+# #                                     - Beeinflusst die Schreibweise der predifinierten Variable  #
+# #                                       DateLong. Fuer language_name siehe Date::Language. Vorga- #
+# #                                       be ist German.                                            #
+# #                          -predef                 ( optional )                                   #
+# #                           Syntax:  '-predef' => [ 'DateTime', key, template, language ]         #
+# #                                     - Erstellt Datum/Zeit - Variable mit dem Namen 'key', der   #
+# #                                       Formatierung 'template' in der Sprache 'language' mittels #
+# #                                       des Moduls Date::Language.                                #
+# #                           Syntax:  '-predef' => [ 'UserValue', key, value ]                     #
+# #                                     - Erstellt frei definierbare predifinierte Variablen.       #
+# #                          ---------------------------------------------------------------------- #
+# #                          Alle weiteren hier uebergebenen Parameterpaare ( Option / Wert ) wer-  #
+# #                          den an das Modul 'Config::IniFiles' weitergereicht. Die Beschreibung   #
+# #                          der Parameter ist dessen Dokumentation zu entnehmen.                   #
 # #                           -file                                                                 #
 # #                           -allowcontinue         ( optional )                                   #
 # #                           -allowedcommentchars   ( optional )                                   #
@@ -111,7 +134,7 @@
 # #                        - Das Package, in das der Import der Variablen erfolgt ist waehlbar.     #
 # #                0.500 - 14.05.2003 - JvB                                                         #
 # #                        Erweiterung fuer die Verarbeitung predefinierter Variablen.              #
-# #                        - ScriptPath, UserName                                                   #
+# #                        - FindBin, UserName                                                      #
 # #                0.600 - 15.05.2003 - JvB                                                         #
 # #                        Erweiterung fuer den Import einzelner Parameter einer Sektion.           #
 # #                        - Mit der Option '-loadvariable' koennen nur einzelne Parameter einer    #
@@ -119,16 +142,21 @@
 # #                0.700 - 15.05.2003 - JvB                                                         #
 # #                        Weitere predefinierte Variable hinzugefuegt.                             #
 # #                        - TimeShort, TimeLong, DateShort, DateLong, DateTime                     #
-# #                        Veraenderung des optionalen Protokolldrucks.                             #
+# #                        - Veraenderung des optionalen Protokolldrucks.                           #
+# #                0.701 - 13.06.2003 - JvB                                                         #
+# #                        - Korrektur der Dokumentation                                            #
+# #                0.800 - 13.06.2003 - JvB                                                         #
+# #                        - Erweiterung fuer frei definierbare 'predefinierte Variable'            #
 # ###################################################################################################
 
   package Config::IniFiles::Import;
 
-  use vars qw( $VERSION );  $VERSION = '0.700';
+  use vars qw( $VERSION );  $VERSION = '0.800';
 
   use Carp;
+  use Date::Language;
   use FindBin;
-  use Config::IniFiles 2.29;
+  use Config::IniFiles  2.29;
 
   use strict;
 
@@ -148,18 +176,37 @@
         my $class = shift;
         my $self  = { -caller => caller };
 
+        $self->{language} = 'German';
+
+        my $time = time;
+
         # --- Optionen uebernehmen 
 
         while ( my ( $key, $value ) = splice( @_, 0, 2 ) )
         {
-          if    ( $key eq '-file'                ) { unshift( @{$self->{option}}, ( $key, $value ) ) }
-          elsif ( $key eq '-allowcontinue'       ) { push( @{$self->{option}}, ( $key, $value ) ) }
-          elsif ( $key eq '-allowedcommentchars' ) { push( @{$self->{option}}, ( $key, $value ) ) }
-          elsif ( $key eq '-commentchar'         ) { push( @{$self->{option}}, ( $key, $value ) ) }
-          elsif ( $key eq '-default'             ) { push( @{$self->{option}}, ( $key, $value ) ) }
-          elsif ( $key eq '-nocase'              ) { push( @{$self->{option}}, ( $key, $value ) ) }
-          elsif ( $key eq '-reloadwarn'          ) { push( @{$self->{option}}, ( $key, $value ) ) }
-          elsif ( $key eq '-import'              ) { push( @{$self->{option}}, ( $key, $value ) ) }
+          if    ( $key eq '-file'     ) { unshift( @{$self->{option}}, ( $key, $value ) ) }
+          elsif ( $key eq '-language' ) { $self->{language} = $value }
+          elsif ( $key eq '-predef'   )
+          {
+            my ( $type, $key, $value, $lang ) = @$value;
+            if    ( $type eq 'DateTime' )
+            {
+              my $lang = Date::Language -> new( $lang );
+              $self->{predef}->{$key} = $lang -> time2str( $value, $time );
+            }
+            elsif ( $type eq 'UserValue' )
+            {
+              $self->{predef}->{$key} = $value;
+            }
+            else
+            {
+              croak "Error by predifinition : $type : $key = $value\n";
+            }
+          }
+          else
+          {
+            push( @{$self->{option}}, ( $key, $value ) );
+          }
         }
 
         # --- Testen ob die INI-Files vorhanden sind
@@ -175,20 +222,16 @@
 
         # --- Belegen der predefinierten Variablen
 
-        my ( $sek, $min, $std, $tag, $mon, $jahr ) = localtime( time );
-
-        $mon ++;  $jahr += 1900;
-
-        my @mon = ( undef, qw( Jan Feb Mar Apr Mai Jun Jul Aug Sep Okt Nov Dez  ) );
-
         $self->{predef}->{'FindBin'}   = $FindBin::Bin;
         $self->{predef}->{'UserName'}  = $ENV{USER};
-        $self->{predef}->{'TimeShort'} = sprintf "%02s:%02s"     , $std, $min;
-        $self->{predef}->{'TimeLong'}  = sprintf "%02s:%02s:%02s", $std, $min, $sek;
-        $self->{predef}->{'DateShort'} = sprintf "%02s.%02s.%04s", $tag, $mon, $jahr;
-        $self->{predef}->{'DateLong'}  = sprintf "%02s.%03s.%04s", $tag, $mon[$mon], $jahr;
-        $self->{predef}->{'DateTime'}  = $self->{predef}->{'DateShort'} . ' - ' .
-                                         $self->{predef}->{'TimeShort'};
+
+        my $lang = Date::Language -> new( $self->{language} );
+
+        $self->{predef}->{'TimeShort'} = $lang -> time2str( '%H:%M'           , $time );
+        $self->{predef}->{'TimeLong'}  = $lang -> time2str( '%X'              , $time );
+        $self->{predef}->{'DateShort'} = $lang -> time2str( '%d.%m.%Y'        , $time );
+        $self->{predef}->{'DateLong'}  = $lang -> time2str( '%d.%b.%Y'        , $time );
+        $self->{predef}->{'DateTime'}  = $lang -> time2str( '%d.%m.%Y - %H:%M', $time );
 
         bless $self, $class;
 
@@ -329,7 +372,7 @@ Config::IniFile::Import - Import von MS-Windows-Format-Ini-Dateien auf Variablen
 
 =head1 VERSION
 
-Dieses Dokument beschreibt die Version 0.700 des Moduls Config::IniFiles::Import vom 15.05.2003
+Dieses Dokument beschreibt die Version 0.800 des Moduls Config::IniFiles::Import vom 13.06.2003
 
 =head1 ANWENDUNG
 
@@ -390,7 +433,7 @@ Folgende 'predefinierte Variablen' sind definiert:
 
 =over 7
 
-=item B<ScriptPath>
+=item B<FindBin>
 
 =back
 
@@ -447,9 +490,14 @@ Enthaelt das Datum und die Uhrzeit des Programmstarts in der Form 'TT.MM.JJJJ - 
 =item B<Substitutions-Beispiel fuer 'predifinierte Variablen'>
 
   [SEKTION_2]
-  Wert3 = {ScriptPath}
+  Wert3 = {FindBin}
 
   Das ergibt fuer Wert3 den Pfad zum aktuellen Perl-Skript.
+
+=head2 User-definierte 'predefinierte Variablen'
+
+Seit der Version 0.800 koennen mittels des Klassenkonstruktor eigene predefienierte Variablen
+erzeugt werden.
 
 =head1 METHODEN
 
@@ -461,9 +509,36 @@ $INI = Config::IniFiles::Import -> new(
                                         ...
                                       );
 
-Alle hier uebergebenen Parameterpaare ( Option / Wert ) werden an das Modul 'Config::IniFiles'
-weitergereicht. Die Beschreibung der Parameter ist dessen Dokumentation zu entnehmen.
-Nachfolgend werden jedoch die moeglichen Parameter aufgefuehrt.
+=over 7
+
+=item B<-language>  -  ( optional )
+
+=back
+
+Syntax:  '-language' => language_name
+
+language_name : Alle vom Modul 'Date::Language' unterstuetzen Sprachen.
+
+Dieser Parameter beeinflusst die Schreibweise der predefinierten Variablen 'DateLong'.
+
+=over 7
+
+=item B<-predef>  -  ( optional )
+
+=back
+
+Syntax 1:  '-predef' = [ 'DateTime', key, template, language ]
+
+Erstellt Datum/Zeit - Variable mit dem Namen 'key', der Formatierung 'template' in der Sprache
+'language' mittels des Moduls Date::Language.
+
+Syntax 2:  '-predef' = [ 'UserValue', key, value ]
+
+Erstellt eine frei definierbare predifinierte Variable mit dem Namen 'key' und Wert 'value'.
+
+Alle weiteren hier uebergebenen Parameterpaare ( Option / Wert ) werden an das Modul
+'Config::IniFiles' weitergereicht. Die Beschreibung der Parameter ist dessen Dokumentation zu
+entnehmen. Nachfolgend werden jedoch die moeglichen Parameter aufgefuehrt.
 
 =over 7
 
@@ -562,11 +637,14 @@ Die importierten Variablen werden in der Datei 'Load.prt' im aktuellen Verzeichn
 =head2 Datei - Ini1.ini
 
   [GLOBAL]
-  Script        = {ScriptPath}
+  Script        = {FindBin}
   [USER]
   Name          = {UserName}
   TmpDir        = C:\Tmp
   TempDir       = C:\Temp\{UserName}
+  [VAR]
+  Datum         = {Datum}
+  Ort           = {City}
 
 =head2 Datei - Ini2.ini
 
@@ -591,19 +669,23 @@ Die importierten Variablen werden in der Datei 'Load.prt' im aktuellen Verzeichn
     print $FH '-' x 100 . "\n\n";
   #
     $INI = Config::IniFiles::Import ->
-           new( -file   => File::Spec->catfile( qw( . Ini1.ini ) ),
+           new( -predef => [ 'DateTime' , 'Datum', '%B.%Y', 'German' ],
+                -predef => [ qw( UserValue City Berlin ) ],
+                -file   => File::Spec->catfile( qw( . Ini1.ini ) ),
                 -import => Config::IniFiles ->
                            new( -file => File::Spec->catfile( qw( . Ini2.ini ) ) )
               );
   #
     $INI -> Import(
                     -loadsection  => [ qw( GLOBAL VERZEICHNISSE ) ],
-                    -loadvariable => [ qw( USER::Name+TempDir   ) ],
+                    -loadvariable => [ qw( USER::Name+TempDir VAR::Datum+Ort ) ],
                     -protocol     => $FH                           ,
                     -exportto     => 'Cfg'
                   );
   #
-    print "$Cfg::USER_Name\n";
+    print "$Cfg::USER_Name\n";   # print = Name des Users
+    print "$Cfg::VAR_Datum\n";   # print = Monatsname.Jahr in deutsch
+    print "$Cfg::VAR_Ort\n";     # print = Berlin
   #
   ###############################################################################
 
@@ -630,6 +712,16 @@ Die Angegeben Variable konnte nicht erzeugt werden.
 
 Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebrochen!
 
+=over 7
+
+=item B<Error by predifinition : $type : $key = $value\n>
+
+=back
+
+Die Definition einer privaten 'predefinierten Variablen' ist falsch.
+
+Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebrochen!
+
 =head1 PRAGMAS
 
 strict
@@ -639,6 +731,8 @@ vars
 =head1 MODULE
 
 Carp
+
+Date::Language
 
 FindBin
 
@@ -685,7 +779,7 @@ vorzunehmen:
 0.500 - 14.05.2003 - JvB
 
         Erweiterung fuer die Verarbeitung predefinierter Variablen.
-        - ScriptPath, UserName
+        - FindBin, UserName
 
 0.600 - 15.05.2003 - JvB
 
@@ -698,6 +792,14 @@ vorzunehmen:
         Weitere predefinierte Variable hinzugefuegt.
         - TimeShort, TimeLong, DateShort, DateLong, DateTime
         Veraenderung des optionalen Protokolldrucks.
+
+0.701 - 13.06.2003 - JvB
+
+        - Korrektur der Dokumentation
+
+0.800 - 13.06.2003 - JvB
+
+        - Erweiterung fuer frei definierbare 'predefinierte Variable'
 
 =head1 AUTOREN
 

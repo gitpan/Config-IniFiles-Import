@@ -5,3 +5,6 @@ Makefile.PL
 MANIFEST
 README
 t/1.t
+example/Test.ini
+example/Test.pl
+example/Test.prt

@@ -21,6 +21,7 @@
 		<li><a href="#wertesubstitution_mit_inidatei_eintraegen">Wertesubstitution mit INI-Datei Eintraegen</a></li>
 		<li><a href="#wertesubstitution_mit_'predefinierte_variablen'">Wertesubstitution mit 'predefinierte Variablen'</a></li>
 		<li><a href="#predefinierte_variable">Predefinierte Variable</a></li>
+		<li><a href="#userdefinierte_'predefinierte_variablen'">User-definierte 'predefinierte Variablen'</a></li>
 	</ul>
 
 	<li><a href="#methoden">METHODEN</a></li>
@@ -57,7 +58,7 @@
 </p>
 <hr />
 <h1><a name="version">VERSION</a></h1>
-<p>Dieses Dokument beschreibt die Version 0.700 des Moduls Config::IniFiles::Import vom 15.05.2003</p>
+<p>Dieses Dokument beschreibt die Version 0.800 des Moduls Config::IniFiles::Import vom 13.06.2003</p>
 <p>
 </p>
 <hr />
@@ -172,6 +173,11 @@ angesprochen werden koennen:</p>
 </dl>
 <p>
 </p>
+<h2><a name="userdefinierte_'predefinierte_variablen'">User-definierte 'predefinierte Variablen'</a></h2>
+<p>Seit der Version 0.800 koennen mittels des Klassenkonstruktor eigene predefienierte Variablen
+erzeugt werden.</p>
+<p>
+</p>
 <hr />
 <h1><a name="methoden">METHODEN</a></h1>
 <p>
@@ -182,9 +188,25 @@ angesprochen werden koennen:</p>
                                         -option =&gt; value,
                                         ...
                                       );</p>
-<p>Alle hier uebergebenen Parameterpaare ( Option / Wert ) werden an das Modul 'Config::IniFiles'
-weitergereicht. Die Beschreibung der Parameter ist dessen Dokumentation zu entnehmen.
-Nachfolgend werden jedoch die moeglichen Parameter aufgefuehrt.</p>
+<dl>
+<dt><strong><a name="item_%2dlanguage_%2d_%28_optional_%29"><strong>-language</strong>  -  ( optional )</a></strong><br />
+</dt>
+</dl>
+<p>Syntax:  '-language' =&gt; language_name</p>
+<p>language_name : Alle vom Modul 'Date::Language' unterstuetzen Sprachen.</p>
+<p>Dieser Parameter beeinflusst die Schreibweise der predefinierten Variablen 'DateLong'.</p>
+<dl>
+<dt><strong><a name="item_%2dpredef_%2d_%28_optional_%29"><strong>-predef</strong>  -  ( optional )</a></strong><br />
+</dt>
+</dl>
+<p>Syntax 1:  '-predef' = [ 'DateTime', key, template, language ]</p>
+<p>Erstellt Datum/Zeit - Variable mit dem Namen 'key', der Formatierung 'template' in der Sprache
+'language' mittels des Moduls Date::Language.</p>
+<p>Syntax 2:  '-predef' = [ 'UserValue', key, value ]</p>
+<p>Erstellt eine frei definierbare predifinierte Variable mit dem Namen 'key' und Wert 'value'.</p>
+<p>Alle weiteren hier uebergebenen Parameterpaare ( Option / Wert ) werden an das Modul
+'Config::IniFiles' weitergereicht. Die Beschreibung der Parameter ist dessen Dokumentation zu
+entnehmen. Nachfolgend werden jedoch die moeglichen Parameter aufgefuehrt.</p>
 <dl>
 <dt><strong><a name="item_%2dfile"><strong>-file</strong></a></strong><br />
 </dt>
@@ -266,7 +288,10 @@ ignoriert.</p>
   [USER]
   Name          = {UserName}
   TmpDir        = C:\Tmp
-  TempDir       = C:\Temp\{UserName}</pre>
+  TempDir       = C:\Temp\{UserName}
+  [VAR]
+  Datum         = {Datum}
+  Ort           = {City}</pre>
 <p>
 </p>
 <h2><a name="datei__ini2.ini">Datei - Ini2.ini</a></h2>
@@ -293,19 +318,23 @@ ignoriert.</p>
     print $FH '-' x 100 . &quot;\n\n&quot;;
   #
     $INI = Config::IniFiles::Import -&gt;
-           new( -file   =&gt; File::Spec-&gt;catfile( qw( . Ini1.ini ) ),
+           new( -predef =&gt; [ 'DateTime' , 'Datum', '%B.%Y', 'German' ],
+                -predef =&gt; [ qw( UserValue City Berlin ) ],
+                -file   =&gt; File::Spec-&gt;catfile( qw( . Ini1.ini ) ),
                 -import =&gt; Config::IniFiles -&gt;
                            new( -file =&gt; File::Spec-&gt;catfile( qw( . Ini2.ini ) ) )
               );
   #
     $INI -&gt; Import(
                     -loadsection  =&gt; [ qw( GLOBAL VERZEICHNISSE ) ],
-                    -loadvariable =&gt; [ qw( USER::Name+TempDir   ) ],
+                    -loadvariable =&gt; [ qw( USER::Name+TempDir VAR::Datum+Ort ) ],
                     -protocol     =&gt; $FH                           ,
                     -exportto     =&gt; 'Cfg'
                   );
   #
-    print &quot;$Cfg::USER_Name\n&quot;;
+    print &quot;$Cfg::USER_Name\n&quot;;   # print = Name des Users
+    print &quot;$Cfg::VAR_Datum\n&quot;;   # print = Monatsname.Jahr in deutsch
+    print &quot;$Cfg::VAR_Ort\n&quot;;     # print = Berlin
   #
   ###############################################################################</pre>
 <p>
@@ -325,6 +354,12 @@ zugegriffen, oder es wird eine nicht existente predifinierte Variable angesproch
 </dl>
 <p>Die Angegeben Variable konnte nicht erzeugt werden.</p>
 <p>Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebrochen!</p>
+<dl>
+<dt><strong><a name="item_error_by_predifinition_%3a_%24type_%3a_%24key_%3d_"><strong>Error by predifinition : $type : $key = $value\n</strong></a></strong><br />
+</dt>
+</dl>
+<p>Die Definition einer privaten 'predefinierten Variablen' ist falsch.</p>
+<p>Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebrochen!</p>
 <p>
 </p>
 <hr />
@@ -336,6 +371,7 @@ zugegriffen, oder es wird eine nicht existente predifinierte Variable angesproch
 <hr />
 <h1><a name="module">MODULE</a></h1>
 <p>Carp</p>
+<p>Date::Language</p>
 <p>FindBin</p>
 <p>Config::IniFiles   Version : 2.29 ( oder neuer )</p>
 <p>Bei dem Einsatz unter Windoofs ist folgender Patch in dem Modul 'Config::IniFiles'
@@ -385,6 +421,12 @@ vorzunehmen:</p>
         Weitere predefinierte Variable hinzugefuegt.
         - TimeShort, TimeLong, DateShort, DateLong, DateTime
         Veraenderung des optionalen Protokolldrucks.</pre>
+<p>0.701 - 13.06.2003 - JvB</p>
+<pre>
+        - Korrektur der Dokumentation</pre>
+<p>0.800 - 13.06.2003 - JvB</p>
+<pre>
+        - Erweiterung fuer frei definierbare 'predefinierte Variable'</pre>
 <p>
 </p>
 <hr />
