@@ -3,7 +3,7 @@
 # #                -------------------------------------------------------------------------------- #
 # # Author      :  Juergen von Brietzke                                                 (c) JvBSoft #
 # #                -------------------------------------------------------------------------------- #
-# # Version     :  0.900                                                                18.Jun.2003 #
+# # Version     :  0.901                                                                19.Jun.2003 #
 # ###################################################################################################
 # #                                              P O D                                              #
 # ###################################################################################################
@@ -16,7 +16,7 @@ Config::IniFile::Import - Import von MS-Windows-Format-Ini-Dateien auf Variablen
 
 =head1 VERSION
 
-Dieses Dokument beschreibt die Version 0.900 des Moduls Config::IniFiles::Import vom 18.06.2003
+Dieses Dokument beschreibt die Version 0.901 des Moduls Config::IniFiles::Import vom 19.06.2003
 
 =head1 ANWENDUNG
 
@@ -40,11 +40,11 @@ Dabei werden die Variablen-Namen wie folgt gebildet:
 
   - Der Sektions-Name wird mit dem Parameter-Namen, getrennt durch Unterstrich verbunden und dem
     Package 'INI' ( Standardfall ) zugeordnet.
-  - Es besteht die aber auch Moeglichkeit den Package-Namen frei zu waehlen.
+  - Es besteht aber auch die Moeglichkeit den Package-Namen frei zu waehlen.
 
 Aus diesem Grunde gelten fuer die Sektions- und Parameter-Namen folgende Einschraenkungen:
 
-  - Diese Bezeichner duerfen nur aus gueltigen Wortzeichen bestehen ( a-z, A-Z, 0-9, _ )
+  - Die Bezeichner duerfen nur aus gueltigen Wortzeichen bestehen ( a-z, A-Z, 0-9, _ )
   - Die Gross-/Kleinschreibung wird beachtet und fuehrt zu verschiedenen Variablennamen
 
 =head2 Wertesubstitution mit INI-Datei Eintraegen
@@ -160,8 +160,8 @@ $INI = Config::IniFiles::Import -> new(
 
 Syntax:  '-language' => language
 
-Dieser Parameter beeinflusst die Schreibweise des Monatsnamens predefinierten Variablen 'DateLong'
-( Standardwert ist 'German ).
+Dieser Parameter beeinflusst die Schreibweise des Monatsnamens der predefinierten Variablen
+'DateLong' ( Standardwert ist 'German' ).
 
 language : Alle vom Modul 'Date::Language' unterstuetzen Sprachen.
 
@@ -177,11 +177,12 @@ Erstellt Datum- / Zeit-Variable mit dem Namen 'key', der Formatierung 'template'
 'language' mittels des Moduls Date::Language.
 
 template : Alle vom Modul 'Date::Language' unterstuetzen Formatierungen.
+
 language : Alle vom Modul 'Date::Language' unterstuetzen Sprachen.
 
 Syntax 2:  '-predef' = [ 'UserValue', key, value ]
 
-Erstellt eine frei definierbare predefinierte Variable mit dem Namen 'key' und Wert 'value'.
+Erstellt eine frei definierbare 'predefinierte Variable' mit dem Namen 'key' und Wert 'value'.
 
 Alle weiteren hier uebergebenen Parameterpaare ( Option / Wert ) werden an das Modul
 'Config::IniFiles' weitergereicht. Die Beschreibung der Parameter ist dessen Dokumentation zu
@@ -218,7 +219,7 @@ $INI -> Import(
 
 Diese Methode liest die INI-Datei(en) ein und importiert die Daten auf Variable. Die Definition
 der Variablen erfolgt in dieser Methode als globale Variable ( use vars qw( ... ) ). Damit
-koennen Programme die dieses Modul anwenden, weiter mit dem Pragma 'use strict' arbeiten.
+koennen Programme die dieses Modul anwenden, weiterhin mit dem Pragma 'use strict' arbeiten.
 
 =over 7
 
@@ -228,7 +229,7 @@ koennen Programme die dieses Modul anwenden, weiter mit dem Pragma 'use strict' 
 
 Syntax:  '-loadsection' => [ qw( section1 section2 ... ) ]
 
-Wird diese Option uebergeben, so werden nur die benannten Sektionen importiert. Andernfall erfolgt
+Wird diese Option uebergeben, so werden nur die benannten Sektionen importiert. Andernfalls erfolgt
 der Import aller Sektionen.
 
 =over 7
@@ -347,7 +348,7 @@ Die importierten Variablen werden in der Datei 'Load.prt' im aktuellen Verzeichn
 Bei einer Substitution wird auf eine nicht definierte Kombination aus Sektion und Schluessel
 zugegriffen, oder es wird eine nicht existente predifinierte Variable angesprochen.
 
-Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebrochen!
+Das Skript wird mit dieser Fehlermeldung abgebrochen!
 
 =over 7
 
@@ -357,7 +358,7 @@ Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebroche
 
 Die Angegeben Variable konnte nicht erzeugt werden.
 
-Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebrochen!
+Das Skript wird mit dieser Fehlermeldung abgebrochen!
 
 =over 7
 
@@ -367,7 +368,7 @@ Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebroche
 
 Die Definition einer privaten 'predefinierten Variablen' ist falsch.
 
-Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebrochen!
+Das Skript wird mit dieser Fehlermeldung abgebrochen!
 
 =head1 PRAGMAS
 
@@ -379,16 +380,16 @@ vars
 
 Carp
 
-Date::Language
-
 FindBin
 
 Config::IniFiles   Version : 2.29 ( oder neuer )
 
+Date::Language                    ( TimeDate )
+
 Bei dem Einsatz unter Windoofs ist folgender Patch in dem Modul 'Config::IniFiles'
 vorzunehmen:
 
-  - Im Unterprogramm 'ReadConfig' ist die Anweisung wie folgt zu aendern:
+  - Im Unterprogramm 'ReadConfig' ist folgende Anweisung zu aendern:
     - von: 'while($self->{allowcontinue} && $val =~ s/\\$//) {'
     - in : 'while($self->{allowcontinue} && $val =~ s/\s\\$//) {'
 

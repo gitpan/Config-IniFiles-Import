@@ -55,6 +55,9 @@ GERMAN
 #         - Erweiterung fuer mehrere Substitutionen in einer Zeile                 #
 #         - Verbesserung der Dokumentation                                         #
 #         - Dokumentation ( POD ) ist eine eigenstaendige Datei                    #
+# -------------------------------------------------------------------------------- #
+# 0.901 - 19.06.2003 - JvB                                                    CPAN #
+#         - Ueberarbeitung der Dokumentation                                       #
 ####################################################################################
 
 ENGLISH
@@ -102,4 +105,7 @@ ENGLISH
 #         - Added multi substitution                                               #
 #         - Better documentation                                                   #
 #         - POD is separate file                                                   #
+# -------------------------------------------------------------------------------- #
+# 0.901 - 19.06.2003 - JvB                                                    CPAN #
+#         - Better documentation                                                   #
 ####################################################################################

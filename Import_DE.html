@@ -58,7 +58,7 @@
 </p>
 <hr />
 <h1><a name="version">VERSION</a></h1>
-<p>Dieses Dokument beschreibt die Version 0.900 des Moduls Config::IniFiles::Import vom 18.06.2003</p>
+<p>Dieses Dokument beschreibt die Version 0.901 des Moduls Config::IniFiles::Import vom 19.06.2003</p>
 <p>
 </p>
 <hr />
@@ -84,10 +84,10 @@ vorliegenden Modul auf korrespondierende Variablen importiert.</p>
 <pre>
   - Der Sektions-Name wird mit dem Parameter-Namen, getrennt durch Unterstrich verbunden und dem
     Package 'INI' ( Standardfall ) zugeordnet.
-  - Es besteht die aber auch Moeglichkeit den Package-Namen frei zu waehlen.</pre>
+  - Es besteht aber auch die Moeglichkeit den Package-Namen frei zu waehlen.</pre>
 <p>Aus diesem Grunde gelten fuer die Sektions- und Parameter-Namen folgende Einschraenkungen:</p>
 <pre>
-  - Diese Bezeichner duerfen nur aus gueltigen Wortzeichen bestehen ( a-z, A-Z, 0-9, _ )
+  - Die Bezeichner duerfen nur aus gueltigen Wortzeichen bestehen ( a-z, A-Z, 0-9, _ )
   - Die Gross-/Kleinschreibung wird beachtet und fuehrt zu verschiedenen Variablennamen</pre>
 <p>
 </p>
@@ -192,8 +192,8 @@ zu uebergeben, oder die bestehenden zu ueberschreiben.</p>
 </dt>
 </dl>
 <p>Syntax:  '-language' =&gt; language</p>
-<p>Dieser Parameter beeinflusst die Schreibweise des Monatsnamens predefinierten Variablen 'DateLong'
-( Standardwert ist 'German ).</p>
+<p>Dieser Parameter beeinflusst die Schreibweise des Monatsnamens der predefinierten Variablen
+'DateLong' ( Standardwert ist 'German' ).</p>
 <p>language : Alle vom Modul 'Date::Language' unterstuetzen Sprachen.</p>
 <dl>
 <dt><strong><a name="item_%2dpredef_%2d_%28_optional_%29"><strong>-predef</strong>  -  ( optional )</a></strong><br />
@@ -202,10 +202,10 @@ zu uebergeben, oder die bestehenden zu ueberschreiben.</p>
 <p>Syntax 1:  '-predef' = [ 'DateTime', key, template, language ]</p>
 <p>Erstellt Datum- / Zeit-Variable mit dem Namen 'key', der Formatierung 'template' in der Sprache
 'language' mittels des Moduls Date::Language.</p>
-<p>template : Alle vom Modul 'Date::Language' unterstuetzen Formatierungen.
-language : Alle vom Modul 'Date::Language' unterstuetzen Sprachen.</p>
+<p>template : Alle vom Modul 'Date::Language' unterstuetzen Formatierungen.</p>
+<p>language : Alle vom Modul 'Date::Language' unterstuetzen Sprachen.</p>
 <p>Syntax 2:  '-predef' = [ 'UserValue', key, value ]</p>
-<p>Erstellt eine frei definierbare predefinierte Variable mit dem Namen 'key' und Wert 'value'.</p>
+<p>Erstellt eine frei definierbare 'predefinierte Variable' mit dem Namen 'key' und Wert 'value'.</p>
 <p>Alle weiteren hier uebergebenen Parameterpaare ( Option / Wert ) werden an das Modul
 'Config::IniFiles' weitergereicht. Die Beschreibung der Parameter ist dessen Dokumentation zu
 entnehmen. Nachfolgend werden jedoch die moeglichen Parameter aufgefuehrt.</p>
@@ -238,13 +238,13 @@ entnehmen. Nachfolgend werden jedoch die moeglichen Parameter aufgefuehrt.</p>
               );</p>
 <p>Diese Methode liest die INI-Datei(en) ein und importiert die Daten auf Variable. Die Definition
 der Variablen erfolgt in dieser Methode als globale Variable ( use vars qw( ... ) ). Damit
-koennen Programme die dieses Modul anwenden, weiter mit dem Pragma 'use strict' arbeiten.</p>
+koennen Programme die dieses Modul anwenden, weiterhin mit dem Pragma 'use strict' arbeiten.</p>
 <dl>
 <dt><strong><a name="item_%2dloadsection_%2d_%28_optional_%29"><strong>-loadsection</strong>  -  ( optional )</a></strong><br />
 </dt>
 </dl>
 <p>Syntax:  '-loadsection' =&gt; [ qw( section1 section2 ... ) ]</p>
-<p>Wird diese Option uebergeben, so werden nur die benannten Sektionen importiert. Andernfall erfolgt
+<p>Wird diese Option uebergeben, so werden nur die benannten Sektionen importiert. Andernfalls erfolgt
 der Import aller Sektionen.</p>
 <dl>
 <dt><strong><a name="item_%2dloadvariable_%2d_%28_optional_%29"><strong>-loadvariable</strong>  -  ( optional )</a></strong><br />
@@ -349,19 +349,19 @@ ignoriert.</p>
 </dl>
 <p>Bei einer Substitution wird auf eine nicht definierte Kombination aus Sektion und Schluessel
 zugegriffen, oder es wird eine nicht existente predifinierte Variable angesprochen.</p>
-<p>Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebrochen!</p>
+<p>Das Skript wird mit dieser Fehlermeldung abgebrochen!</p>
 <dl>
 <dt><strong><a name="item_can%27t_create_variable_package%3a%3asektion_schlu"><strong>Can't create variable package::sektion_schluessel</strong></a></strong><br />
 </dt>
 </dl>
 <p>Die Angegeben Variable konnte nicht erzeugt werden.</p>
-<p>Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebrochen!</p>
+<p>Das Skript wird mit dieser Fehlermeldung abgebrochen!</p>
 <dl>
 <dt><strong><a name="item_error_by_predifinition_%3a_%24type_%3a_%24key_%3d_"><strong>Error by predifinition : $type : $key = $value\n</strong></a></strong><br />
 </dt>
 </dl>
 <p>Die Definition einer privaten 'predefinierten Variablen' ist falsch.</p>
-<p>Das Skript wird in diesem Fall mit einer entsprechenden Fehlermeldung abgebrochen!</p>
+<p>Das Skript wird mit dieser Fehlermeldung abgebrochen!</p>
 <p>
 </p>
 <hr />
@@ -373,13 +373,13 @@ zugegriffen, oder es wird eine nicht existente predifinierte Variable angesproch
 <hr />
 <h1><a name="module">MODULE</a></h1>
 <p>Carp</p>
-<p>Date::Language</p>
 <p>FindBin</p>
 <p>Config::IniFiles   Version : 2.29 ( oder neuer )</p>
+<p>Date::Language                    ( TimeDate )</p>
 <p>Bei dem Einsatz unter Windoofs ist folgender Patch in dem Modul 'Config::IniFiles'
 vorzunehmen:</p>
 <pre>
-  - Im Unterprogramm 'ReadConfig' ist die Anweisung wie folgt zu aendern:
+  - Im Unterprogramm 'ReadConfig' ist folgende Anweisung zu aendern:
     - von: 'while($self-&gt;{allowcontinue} &amp;&amp; $val =~ s/\\$//) {'
     - in : 'while($self-&gt;{allowcontinue} &amp;&amp; $val =~ s/\s\\$//) {'</pre>
 <p>
