@@ -1,4 +1,4 @@
-Config/IniFiles/Import version 0.800
+Config/IniFiles/Import version 0.900
 ====================================
 
 Config::IniFiles::Import - imports Windows-style-INI-files to Perl-variable.
@@ -18,13 +18,12 @@ DEPENDENCIES
 This module requires these other modules and libraries:
 
   Carp
-  Date::Language
   FindBin
+  
   Config::IniFiles  >= 2.29
+  Date::Language    ( TimeDate )
 
 COPYRIGHT AND LICENCE
-
-Put the correct copyright and licence information here.
 
 Copyright (C) 2003 Jürgen von Brietzke
 
